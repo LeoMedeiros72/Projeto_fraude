@@ -1,2 +1,4 @@
-data/
+# .gitignore
+# Ignorar dados grandes
+/data/
 *.csv
