@@ -28,3 +28,9 @@ Use o Postman ou curl:
 docker build -t fraude-api .
 docker run -p 8000:8000 fraude-api
 ```
+
+## Dataset
+
+O arquivo `creditcard.csv` não está no repositório por questões de tamanho.
+
+Para usar o projeto, coloque o arquivo em:
