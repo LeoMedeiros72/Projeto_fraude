@@ -1,36 +1,89 @@
-# Projeto: Detecção de Fraudes
+#  Projeto de Detecção de Fraude com Machine Learning
 
-Este projeto simula um pipeline completo de detecção de fraudes bancárias:
-- Análise exploratória e modelagem com scikit-learn e XGBoost
-- Deploy de modelo com FastAPI e Docker
-- Rastreio de experimentos com MLFlow
-- Monitoramento com Evidently
+Este repositório contém uma solução completa de detecção de fraudes com:
+- **Modelagem supervisionada com Random Forest**
+- **Balanceamento de dados com SMOTE**
+- **API com FastAPI** para inferência
+- **Deploy com Docker**
+- **Monitoramento com MLflow e Evidently**
 
-## Como rodar a API localmente
+---
+
+##  Estrutura do Projeto
+```
+projeto_fraude/
+├── app/                  
+│   ├── main.py
+│   ├── model.joblib
+│   └── requirements.txt
+├── data/                 
+│   └── creditcard.csv    # Não incluído no repositório
+├── docker/
+│   └── Dockerfile
+├── mlflow_tracking/
+│   └── experimento.py
+├── monitoring/
+│   └── drift_report.py
+├── notebooks/
+│   └── 01_modelagem.ipynb
+├── .gitignore
+├── README.md
+```
+
+---
+
+## 🧠 Modelagem
+- Análise exploratória e balanceamento dos dados com SMOTE
+- Treinamento com Random Forest
+- Avaliação com matriz de confusão e classification report
+
+---
+
+## 🚀 API com FastAPI
 ```bash
-cd app
-uvicorn main:app --reload
+uvicorn app.main:app --reload
 ```
+Acesse a documentação automática em: [http://localhost:8000/docs](http://localhost:8000/docs)
 
-## Como testar a API
-Use o Postman ou curl:
-```json
-{
-  "V1": -1.359807,
-  "V2": -0.072781,
-  ...
-  "Amount": 149.62
-}
-```
+---
 
-## Docker
+## 🐳 Deploy com Docker
 ```bash
-docker build -t fraude-api .
-docker run -p 8000:8000 fraude-api
+docker build -t projeto-fraude .
+docker run -d -p 8000:8000 projeto-fraude
 ```
 
-## Dataset
+---
 
-O arquivo `creditcard.csv` não está no repositório por questões de tamanho.
+## 🔍 Monitoramento
+- **MLflow** para rastrear experimentos
+- **Evidently** para detectar drift em produção
 
-Para usar o projeto, coloque o arquivo em:
+---
+
+## 📂 Dataset
+O arquivo `creditcard.csv` **não está incluído no repositório** por questões de tamanho.
+
+Para usar o projeto, coloque o dataset no caminho:
+```bash
+/content/drive/MyDrive/Projeto_Fraude/creditcard.csv
+```
+
+Ou modifique o `data_path` no notebook para apontar corretamente para o arquivo.
+
+Você pode baixar o dataset neste link:  
+👉 https://www.kaggle.com/datasets/mlg-ulb/creditcardfraud
+
+---
+
+## ✅ Requisitos
+Instale as dependências com:
+```bash
+pip install -r app/requirements.txt
+```
+
+---
+
+## 📬 Contato
+Leonardo – Cientista de Dados
+[LinkedIn](https://www.linkedin.com/) 
