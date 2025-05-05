@@ -106,6 +106,8 @@ Para rodar o projeto, coloque o dataset no caminho:
 /content/drive/MyDrive/Projeto_Fraude/creditcard.csv
 ```
 
+![image](https://github.com/user-attachments/assets/1f13da95-679a-4cd3-a5de-af5ea08aeb36)
+
 ## Contato
 Leonardo – Cientista de Dados, Analista de Dados
 
