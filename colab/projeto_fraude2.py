@@ -188,7 +188,7 @@ best_model = XGBClassifier(
     random_state=42,
     eval_metric='logloss'
 )
-best_model.fit(X_res, y_res)  # Use dados balanceados (SMOTE)
+best_model.fit(X_res, y_res) 
 
 # Avaliar no conjunto de teste original
 y_pred_best = best_model.predict(X_test)
