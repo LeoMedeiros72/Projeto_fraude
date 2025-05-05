@@ -8,6 +8,9 @@ Este repositório contém uma solução completa de detecção de fraudes em tra
 - **Deploy com Docker**
 - **Monitoramento com MLflow e Evidently**
 
+
+![image](https://github.com/user-attachments/assets/46d1c5d6-955a-4afc-9a19-97a835bfc339)
+
 ---
 
 ##  Estrutura do Projeto
