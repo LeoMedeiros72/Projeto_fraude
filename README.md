@@ -1,114 +1,124 @@
-# Projeto de Detecção de Fraude com Machine Learning
+# Projeto de Detecção de Fraudes Financeiras
 
-Este repositório contém uma solução completa de detecção de fraudes em transações financeiras utilizando técnicas de Machine Learning. A solução foi desenvolvida com foco em escalabilidade e monitoramento, e é composta por:
+Este projeto apresenta uma solução de machine learning para detecção de fraudes em transações de cartão de crédito. Foi desenvolvido com o objetivo de identificar o maior número possível de fraudes verdadeiras (minimizando falsos negativos), mesmo que isso implique aceitar alguns falsos positivos.
 
-- **Modelagem supervisionada com Random Forest**
-- **Balanceamento de dados com SMOTE**
-- **API com FastAPI** para inferência
-- **Deploy com Docker**
-- **Monitoramento com MLflow e Evidently**
+## Problema
 
+Uma instituição financeira busca identificar fraudes em tempo real em sua base de clientes de cartão de crédito. A prioridade do modelo é **não deixar nenhuma fraude passar despercebida**, mesmo que isso implique classificar algumas transações legítimas como suspeitas. O foco, portanto, está em maximizar a **recall** (sensibilidade) para fraudes.
 
-![image](https://github.com/user-attachments/assets/46d1c5d6-955a-4afc-9a19-97a835bfc339)
+## Solução
 
----
+O projeto utiliza algoritmos supervisionados para treinar e comparar modelos preditivos sobre um conjunto de dados real do Kaggle. Foram avaliados 3 modelos:
 
-##  Estrutura do Projeto
+- Random Forest
+- Regressão Logística
+- XGBoost
+
+O modelo final atingiu **87% de detecção de fraudes com 100% de acurácia geral**, com destaque para a capacidade de generalização em dados desequilibrados.
+
+## Tecnologias Utilizadas
+
+- Python 3.10+
+- Scikit-learn
+- XGBoost
+- Pandas / NumPy
+- FastAPI (para exposição do modelo via API REST)
+- Matplotlib / Seaborn
+
+## Métricas Avaliadas
+
+- **Recall (Fraude):** > 0.85  
+- **Precisão:** > 0.90  
+- **AUC-ROC:** utilizado para comparar performance dos classificadores  
+- **Matriz de Confusão**  
+- **Curva Precision-Recall**
+
+## Como executar
+
+1. Clone o repositório:
+
+```bash
+git clone https://github.com/LeoMedeiros72/Projeto_fraude.git
+cd Projeto_fraude
 ```
-projeto_fraude/
-├── app/                  
-│   ├── main.py
-│   ├── model.joblib
-│   └── requirements.txt
-├── colab /
-│   └── projeto_fraude.ipynb
-|   └── projeto_fraude.py
-├── data/                 
-│   └── creditcard.csv    # Não incluído no repositório (para download acesse: 'https://www.kaggle.com/datasets/mlg-ulb/creditcardfraud'
-├── docker/
-│   └── Dockerfile
-├── mlflow_tracking/
-│   └── experimento.py
-├── monitoring/
-│   └── drift_report.py
+
+2. Crie um ambiente virtual e instale as dependências:
+
+```bash
+python -m venv venv
+source venv/bin/activate  # ou venv\Scripts\activate no Windows
+pip install -r requirements.txt
+```
+
+3. Execute a API:
+
+```bash
+uvicorn main:app --reload
+```
+
+4. Acesse o endpoint:
+
+[http://localhost:8000/docs](http://localhost:8000/docs)
+
+## Exemplos de Entrada/Saída
+
+Exemplo de entrada (via JSON):
+
+```json
+{
+  "amount": 120.50,
+  "transaction_type": "compra",
+  "location": "SP",
+  "time": "15:32:00",
+  ...
+}
+```
+
+Saída esperada:
+
+```json
+{
+  "fraude": true,
+  "probabilidade": 0.92
+}
+```
+
+## Capturas de Tela
+
+![cc2c87c7-a6d1-4f65-a6a8-d137dc8cab45](https://github.com/user-attachments/assets/93c0d7a5-b287-4f6e-b654-c7b560bf74fa)
+
+## Estrutura
+
+Projeto_fraude/
+
+├── data/
+
+├── models/
+
 ├── notebooks/
-│   └── 01_modelagem.ipynb
-├── .gitignore
-├── README.md
-```
 
----
+├── src/
 
-## Modelagem
+│   ├── pipeline.py
 
-Este projeto utiliza a técnica de Random Forest para modelar a detecção de fraudes nas transações financeiras. O fluxo do projeto de modelagem inclui:
+│   └── train_model.py
 
-1. **Análise Exploratória dos Dados (EDA)**: Compreensão dos dados e análise estatística, incluindo a verificação de variáveis e a distribuição das classes.
-2. **Balanceamento dos Dados com SMOTE**: A técnica SMOTE (Synthetic Minority Over-sampling Technique) é aplicada para balancear as classes desiguais (fraude vs não-fraude), gerando amostras sintéticas para a classe minoritária.
-3. **Treinamento do Modelo**: O modelo Random Forest é treinado utilizando os dados balanceados.
-4. **Avaliação do Modelo**: O desempenho do modelo é avaliado por meio da matriz de confusão e do classification report, que fornecem métricas como precisão, recall, F1-score, etc.
+├── main.py
 
----
+├── requirements.txt
 
-## API com FastAPI
+└── README.md
 
-A API foi construída utilizando **FastAPI** para servir o modelo treinado e permitir inferências em tempo real.
+## Considerações 
 
-### Para rodar a API localmente, execute:
+Este projeto é um exemplo realista de aplicação de modelos de classificação com dados desbalanceados, reforçando a importância de priorizar métricas de sensibilidade em cenários críticos como detecção de fraude.
 
-```bash
-uvicorn app.main:app --reload
-```
+## Licença
 
-Ou modifique o `data_path` no notebook para apontar corretamente para o arquivo.
-
-Você pode baixar o dataset neste link:  
-👉 https://www.kaggle.com/datasets/mlg-ulb/creditcardfraud
-
----
-
-## Requisitos
-Instale as dependências com:
-```bash
-pip install -r app/requirements.txt
-```
-
----
-## Deploy com Docker
-
-Para facilitar o deploy da aplicação, ela foi containerizada utilizando Docker. Execute os seguintes comandos para construir e rodar a imagem Docker:
-
-Para construir a imagem Docker:
-```bash
-docker build -t projeto-fraude
-```
-
-Para rodar a aplicação em um container:
-```bash
-docker run -d -p 8000:8000 projeto-fraude
-```
-A aplicação estará acessível em http://localhost:8000.
-
----
-## Monitoramento
-
-O monitoramento da solução é realizado utilizando as seguintes ferramentas:
-
-**MLflow**: Usado para rastrear experimentos e salvar o histórico dos modelos treinados.
-
-**Evidently**: Utilizado para monitorar o drift do modelo em produção, garantindo que a performance do modelo seja mantida ao longo do tempo.
-
----
-## Dataset
-
-Para rodar o projeto, coloque o dataset no caminho:
-```bash
-/content/drive/MyDrive/Projeto_Fraude/creditcard.csv
-```
-
-![image](https://github.com/user-attachments/assets/1f13da95-679a-4cd3-a5de-af5ea08aeb36)
+MIT
 
 ## Contato
-Leonardo – Cientista de Dados, Analista de Dados
 
-[LinkedIn](https://www.linkedin.com/in/leonardo-santos-medeiros/) 
+Projeto desenvolvido por [Leonardo Medeiros](https://www.linkedin.com/in/leonardo-santos-medeiros/).  
+Entre em contato para sugestões, contribuições ou oportunidades!
+
